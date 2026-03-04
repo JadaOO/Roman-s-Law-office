@@ -1,0 +1,24 @@
+[project]
+name = "law_automation"
+version = "0.1.0"
+description = "law_automation using crewAI"
+authors = [{ name = "Jada Yang", email = "jiadaouyang@gmail.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]==1.9.3"
+]
+
+[project.scripts]
+law_automation = "law_automation.main:run"
+run_crew = "law_automation.main:run"
+train = "law_automation.main:train"
+replay = "law_automation.main:replay"
+test = "law_automation.main:test"
+run_with_trigger = "law_automation.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
