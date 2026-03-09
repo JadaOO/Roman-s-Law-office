@@ -1,0 +1,16 @@
+.stTabs [data-baseweb="tab-list"] {
+    gap: 8px;
+}
+.stTabs [data-baseweb="tab"] {
+    background-color: #9ca3af;
+    color: white;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-weight: 500;
+}
+.stTabs [aria-selected="true"] {
+    background-color: #6b7280;
+}
+.stTabs div[data-baseweb="tab-highlight"] {
+    background-color: transparent;
+}

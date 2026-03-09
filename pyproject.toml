@@ -5,7 +5,8 @@ description = "law_automation using crewAI"
 authors = [{ name = "Jada Yang", email = "jiadaouyang@gmail.com" }]
 requires-python = ">=3.10,<3.14"
 dependencies = [
-    "crewai[tools]==1.9.3"
+    "crewai[tools]==1.9.3",
+    "streamlit",
 ]
 
 [project.scripts]
