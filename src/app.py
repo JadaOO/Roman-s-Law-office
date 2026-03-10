@@ -1,7 +1,17 @@
-import streamlit as st
+import sys
 from pathlib import Path
 
+# Ensure project root and src are on path (so config and agent/legal_searcher load)
+_root = Path(__file__).resolve().parent.parent
+_src = Path(__file__).resolve().parent
+for p in (_root, _src):
+    if str(p) not in sys.path:
+        sys.path.insert(0, str(p))
+
+import streamlit as st
+from legal_searcher import legal_searcher
 from law_automation import LawAutomation
+
 
 law_automation = LawAutomation()
 
@@ -21,7 +31,7 @@ def main():
     with tab_home:
         home_page()
     with tab_research:
-        legal_research_writing()
+        legal_searcher()
     with tab_billing:
         billing_payment()
 
@@ -53,20 +63,20 @@ def home_page():
                 law_automation.remove_event(event['id'])
                 st.success("Event removed successfully!")
 
-def legal_research_writing():
-    st.header("Legal Research and Writing")
+# def legal_research_writing():
+#     st.header("Legal Research and Writing")
 
-    query = st.text_input("Enter query for Arizona Law:")
-    if st.button("Search"):
-        research_results = law_automation.perform_legal_research(query)
-        st.write(research_results)
+#     query = st.text_input("Enter query for Arizona Law:")
+#     if st.button("Search"):
+#         research_results = law_automation.perform_legal_research(query)
+#         st.write(research_results)
 
-    client_id = st.number_input("Client ID", min_value=0, step=1)
-    research_text = st.text_area("Research")
-    writing_text = st.text_area("Writing")
-    if st.button("Save"):
-        law_automation.store_research_and_writing(client_id, research_text, writing_text)
-        st.success("Research and writing saved successfully!")
+#     client_id = st.number_input("Client ID", min_value=0, step=1)
+#     research_text = st.text_area("Research")
+#     writing_text = st.text_area("Writing")
+#     if st.button("Save"):
+#         law_automation.store_research_and_writing(client_id, research_text, writing_text)
+#         st.success("Research and writing saved successfully!")
 
 def billing_payment():
     st.header("Billing and Payment System")
