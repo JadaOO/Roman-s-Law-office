@@ -50,20 +50,78 @@ def show_calendar():
     else:
         for i, ev in enumerate(day_events):
             with st.expander(f"{ev.get('event_name', 'Event')} — {ev.get('event_time', '')}"):
-                st.write(f"**Location:** {ev.get('event_location', '')}")
-                if st.button("Remove", key=f"del_{date_str}_{i}"):
-                    events_by_date[date_str].pop(i)
-                    if not events_by_date[date_str]:
-                        del events_by_date[date_str]
-                    _save_events(events_by_date)
-                    st.rerun()
+                editing = (
+                    st.session_state.get("homepage_calendar_edit_form") is True
+                    and st.session_state.get("homepage_calendar_edit_date") == date_str
+                    and st.session_state.get("homepage_calendar_edit_idx") == i
+                )
+
+                if editing:
+                    # Replace the details section with an inline edit form
+                    with st.form(f"edit_calendar_event_{date_str}_{i}", clear_on_submit=True):
+                        event_name = st.text_input("Event name", value=ev.get("event_name", ""))
+                        event_time = st.text_input("Event time", value=ev.get("event_time", ""))
+                        event_location = st.text_input("Event location", value=ev.get("event_location", ""))
+
+                        col_save, col_cancel, _ = st.columns(3)
+                        with col_save:
+                            submitted = st.form_submit_button("Save")
+                        with col_cancel:
+                            cancel = st.form_submit_button("Cancel")
+
+                        if cancel:
+                            st.session_state["homepage_calendar_edit_form"] = False
+                            st.rerun()
+
+                        if submitted and event_name.strip():
+                            events_by_date = _load_events()
+                            day_events = events_by_date.get(date_str, [])
+                            if 0 <= i < len(day_events):
+                                day_events[i] = {
+                                    "event_name": event_name.strip(),
+                                    "event_time": event_time.strip(),
+                                    "event_location": event_location.strip(),
+                                }
+                                events_by_date[date_str] = day_events
+                                _save_events(events_by_date)
+                            st.session_state["homepage_calendar_edit_form"] = False
+                            st.success("Event updated.")
+                            st.rerun()
+                else:
+                    st.write(f"**Location:** {ev.get('event_location', '')}")
+                    col_upd, col_del = st.columns(2)
+                    with col_upd:
+                        if st.button("Update", key=f"upd_{date_str}_{i}"):
+                            st.session_state["homepage_calendar_edit_form"] = True
+                            st.session_state["homepage_calendar_edit_date"] = date_str
+                            st.session_state["homepage_calendar_edit_idx"] = i
+                            # Hide add form if it is open
+                            st.session_state["homepage_calendar_show_form"] = False
+                            st.rerun()
+
+                    with col_del:
+                        if st.button("Remove",type="primary", key=f"del_{date_str}_{i}"):
+                            events_by_date[date_str].pop(i)
+                            if not events_by_date[date_str]:
+                                del events_by_date[date_str]
+                            _save_events(events_by_date)
+                            st.rerun()
 
     # Add Event button; form only visible after click
     if "homepage_calendar_show_form" not in st.session_state:
         st.session_state["homepage_calendar_show_form"] = False
 
+    # Edit Event button/form state
+    if "homepage_calendar_edit_form" not in st.session_state:
+        st.session_state["homepage_calendar_edit_form"] = False
+    if "homepage_calendar_edit_date" not in st.session_state:
+        st.session_state["homepage_calendar_edit_date"] = None
+    if "homepage_calendar_edit_idx" not in st.session_state:
+        st.session_state["homepage_calendar_edit_idx"] = None
+
     if st.button("Add Event", key="add_event_btn"):
         st.session_state["homepage_calendar_show_form"] = True
+        st.session_state["homepage_calendar_edit_form"] = False
         st.rerun()
 
     if st.session_state["homepage_calendar_show_form"]:
@@ -94,3 +152,5 @@ def show_calendar():
                 st.session_state["homepage_calendar_show_form"] = False
                 st.success("Event added.")
                 st.rerun()
+
+    # Inline edit form is rendered inside the corresponding event expander above.
