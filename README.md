@@ -1,4 +1,4 @@
-# Project for a Phoenix Law Firm to 
+# AI Automation for a Phoenix Law Firm to 
 - Manage calendar and send push notifications for attorneys
 - Manage clients data
 - Draft petitions 
@@ -14,6 +14,7 @@
 - RAG
 - Pushover
 - Sendgrid
+- Hugging Face
 
 ## Running the Project
 1. git clone the repo 
