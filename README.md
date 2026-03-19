@@ -4,12 +4,13 @@
 - Draft petitions 
 - Draft emails
 - Handle legal research
-- Hanle billings 
+- Handle billings 
 
 ## Tools and Languages used 
 - Python
 - Streamlit
 - OpenAI SDK
+- Google Gemini API
 - RAG
 - Pushover
 - Sendgrid
