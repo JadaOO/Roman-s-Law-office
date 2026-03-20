@@ -296,107 +296,106 @@ def _auto_download_pdf(pdf_path):
 
 
 def _show_client_billing(client_idx, client_name, client_email, client_obj):
+    view_mode_key = f"billing_view_mode_{client_idx}"
+    history_only_mode = st.session_state.get(view_mode_key) == "history_only"
+
     all_billings = _load_billings()
     client_billings = [b for b in all_billings if b.get("client_index") == client_idx]
     client_total = sum(float(b.get("line_total", 0) or 0) for b in client_billings)
 
-    st.markdown(f"#### Billing for this client — Total: ${client_total:,.2f}")
-    if not client_billings:
-        st.info("No billing entries for this client.")
-        return
+    if not history_only_mode:
+        st.markdown(f"#### Billing for this client — Total: ${client_total:,.2f}")
+        if not client_billings:
+            st.info("No billing entries for this client.")
+            return
 
-    for b in client_billings:
-        billing_id = b.get("id")
-        with st.expander(
-            f"{b.get('date','')} — {b.get('activity','')} — ${float(b.get('line_total', 0) or 0):,.2f}"
-        ):
-            st.write(f"**Date:** {b.get('date', '')}")
-            st.write(f"**EE:** {b.get('ee', '')}")
-            st.write(f"**Activity:** {b.get('activity', '')}")
-            st.write(f"**Description:** {b.get('description', '')}")
-            st.write(f"**Rate:** ${float(b.get('rate', 0) or 0):,.2f}")
-            st.write(f"**Hours:** {float(b.get('hours', 0) or 0):,.2f}")
-            st.write(f"**Line Total (Rate × Hours):** ${float(b.get('line_total', 0) or 0):,.2f}")
+    if not history_only_mode:
+        for b in client_billings:
+            billing_id = b.get("id")
+            with st.expander(
+                f"{b.get('date','')} — {b.get('activity','')} — ${float(b.get('line_total', 0) or 0):,.2f}"
+            ):
+                st.write(f"**Date:** {b.get('date', '')}")
+                st.write(f"**EE:** {b.get('ee', '')}")
+                st.write(f"**Activity:** {b.get('activity', '')}")
+                st.write(f"**Description:** {b.get('description', '')}")
+                st.write(f"**Rate:** ${float(b.get('rate', 0) or 0):,.2f}")
+                st.write(f"**Hours:** {float(b.get('hours', 0) or 0):,.2f}")
+                st.write(f"**Line Total (Rate × Hours):** ${float(b.get('line_total', 0) or 0):,.2f}")
 
-            editing = st.session_state.get("editing_billing_id") == billing_id
-            if not editing:
-                col_u, col_d = st.columns(2)
-                if col_u.button("Update", key=f"update_billing_{billing_id}"):
-                    st.session_state["editing_billing_id"] = billing_id
-                    st.rerun()
-                if col_d.button("Delete", key=f"delete_billing_{billing_id}"):
-                    mutable = _load_billings()
-                    di = _find_billing_by_id(mutable, billing_id)
-                    if di >= 0:
-                        mutable.pop(di)
-                        _save_billings(mutable)
-                    st.success("Billing entry deleted.")
-                    st.rerun()
-            else:
-                with st.form(f"update_billing_form_{billing_id}", clear_on_submit=True):
-                    ub_date = st.date_input(
-                        "Date",
-                        value=datetime.date.fromisoformat(
-                            b.get("date", datetime.date.today().isoformat())
-                        ),
-                    )
-                    ub_ee = st.text_input("EE", value=b.get("ee", ""))
-                    ub_activity = st.text_input("Activity", value=b.get("activity", ""))
-                    ub_description = st.text_area("Description", value=b.get("description", ""))
-                    ub_rate = st.number_input("Rate", min_value=0.0, step=0.01, value=float(b.get("rate", 0) or 0))
-                    ub_hours = st.number_input("Hours", min_value=0.0, step=0.1, value=float(b.get("hours", 0) or 0))
-                    ub_line_total = ub_rate * ub_hours
-                    st.write(f"**Line Total (Rate × Hours):** ${ub_line_total:,.2f}")
-
-                    s1, s2 = st.columns(2)
-                    save_btn = s1.form_submit_button("Save Billing Changes")
-                    cancel_btn = s2.form_submit_button("Cancel")
-                    if cancel_btn:
-                        st.session_state.pop("editing_billing_id", None)
+                editing = st.session_state.get("editing_billing_id") == billing_id
+                if not editing:
+                    col_u, col_d = st.columns(2)
+                    if col_u.button("Update", key=f"update_billing_{billing_id}"):
+                        st.session_state["editing_billing_id"] = billing_id
                         st.rerun()
-                    if save_btn:
-                        all_bills = _load_billings()
-                        ui = _find_billing_by_id(all_bills, billing_id)
-                        if ui >= 0:
-                            all_bills[ui].update(
-                                {
-                                    "date": ub_date.isoformat(),
-                                    "ee": ub_ee.strip(),
-                                    "activity": ub_activity.strip(),
-                                    "description": ub_description.strip(),
-                                    "rate": ub_rate,
-                                    "hours": ub_hours,
-                                    "line_total": ub_line_total,
-                                }
-                            )
-                            _save_billings(all_bills)
-                        st.session_state.pop("editing_billing_id", None)
-                        st.success("Billing entry updated.")
+                    if col_d.button("Delete", key=f"delete_billing_{billing_id}"):
+                        mutable = _load_billings()
+                        di = _find_billing_by_id(mutable, billing_id)
+                        if di >= 0:
+                            mutable.pop(di)
+                            _save_billings(mutable)
+                        st.success("Billing entry deleted.")
                         st.rerun()
+                else:
+                    with st.form(f"update_billing_form_{billing_id}", clear_on_submit=True):
+                        ub_date = st.date_input(
+                            "Date",
+                            value=datetime.date.fromisoformat(
+                                b.get("date", datetime.date.today().isoformat())
+                            ),
+                        )
+                        ub_ee = st.text_input("EE", value=b.get("ee", ""))
+                        ub_activity = st.text_input("Activity", value=b.get("activity", ""))
+                        ub_description = st.text_area("Description", value=b.get("description", ""))
+                        ub_rate = st.number_input("Rate", min_value=0.0, step=0.01, value=float(b.get("rate", 0) or 0))
+                        ub_hours = st.number_input("Hours", min_value=0.0, step=0.1, value=float(b.get("hours", 0) or 0))
+                        ub_line_total = ub_rate * ub_hours
+                        st.write(f"**Line Total (Rate × Hours):** ${ub_line_total:,.2f}")
+
+                        s1, s2 = st.columns(2)
+                        save_btn = s1.form_submit_button("Save Billing Changes")
+                        cancel_btn = s2.form_submit_button("Cancel")
+                        if cancel_btn:
+                            st.session_state.pop("editing_billing_id", None)
+                            st.rerun()
+                        if save_btn:
+                            all_bills = _load_billings()
+                            ui = _find_billing_by_id(all_bills, billing_id)
+                            if ui >= 0:
+                                all_bills[ui].update(
+                                    {
+                                        "date": ub_date.isoformat(),
+                                        "ee": ub_ee.strip(),
+                                        "activity": ub_activity.strip(),
+                                        "description": ub_description.strip(),
+                                        "rate": ub_rate,
+                                        "hours": ub_hours,
+                                        "line_total": ub_line_total,
+                                    }
+                                )
+                                _save_billings(all_bills)
+                            st.session_state.pop("editing_billing_id", None)
+                            st.success("Billing entry updated.")
+                            st.rerun()
 
     history_key = f"show_invoice_history_{client_idx}"
     if history_key not in st.session_state:
         st.session_state[history_key] = False
 
-    close_col, history_col, create_col = st.columns(3)
-    if close_col.button("Close", key=f"close_show_billing_{client_idx}"):
-        st.session_state.pop("show_billing_client_idx", None)
-        st.rerun()
-    if history_col.button("View Invoice History", key=f"history_invoice_{client_idx}"):
-        st.session_state[history_key] = not st.session_state[history_key]
-        st.rerun()
-    if create_col.button("Create a Billing Invoice", key=f"create_invoice_{client_idx}"):
-        pdf_path, invoice_number, deadline = _generate_invoice_pdf(client_obj, client_billings, client_total)
-        moved = _archive_client_billings_after_invoice(
-            client_idx, client_name, client_email, invoice_number, pdf_path, deadline
-        )
-        _auto_download_pdf(str(pdf_path))
-        st.success(
-            f"Invoice created (#{invoice_number}). Moved {moved} billing item(s) "
-            "to db/to_be_paid_billing.json."
-        )
+    if not history_only_mode:
+        close_col, create_col = st.columns(2)
+        if close_col.button("Close", key=f"close_show_billing_{client_idx}"):
+            st.session_state.pop("show_billing_client_idx", None)
+            st.rerun()
+        if create_col.button("Create a Billing Invoice", key=f"create_invoice_{client_idx}"):
+            pdf_path, invoice_number, deadline = _generate_invoice_pdf(client_obj, client_billings, client_total)
+            _archive_client_billings_after_invoice(
+                client_idx, client_name, client_email, invoice_number, pdf_path, deadline
+            )
+            _auto_download_pdf(str(pdf_path))
 
-    if st.session_state.get(history_key):
+    if history_only_mode and st.session_state.get(history_key):
         components.html(
             """
             <script>
@@ -575,9 +574,10 @@ def billing_payment():
                     st.write(f"**Case Description:** {c.get('case_description', '')}")
                     st.write(f"**Status:** {status_val}")
 
-                    col_billing, col_show, col_u, col_d = st.columns(4)
+                    col_billing, col_show, col_history, col_u, col_d = st.columns(5)
                     add_billing_clicked = col_billing.button("Add Billing", key=f"add_billing_{idx}")
                     show_billing_clicked = col_show.button("Show Billing", key=f"show_billing_{idx}")
+                    history_clicked = col_history.button("View Invoice History", key=f"history_invoice_{idx}")
                     update_clicked = col_u.button("Update Client", key=f"update_client_{idx}", type="secondary")
                     delete_clicked = col_d.button("Delete Client", key=f"delete_client_{idx}", type="primary")
 
@@ -586,6 +586,15 @@ def billing_payment():
                         st.session_state.pop("show_billing_client_idx", None)
                         st.rerun()
                     if show_billing_clicked:
+                        st.session_state[f"show_invoice_history_{idx}"] = False
+                        st.session_state[f"billing_view_mode_{idx}"] = "full"
+                        st.session_state["show_billing_client_idx"] = idx
+                        st.session_state.pop("add_billing_client_idx", None)
+                        st.rerun()
+                    if history_clicked:
+                        history_key = f"show_invoice_history_{idx}"
+                        st.session_state[history_key] = not st.session_state.get(history_key, False)
+                        st.session_state[f"billing_view_mode_{idx}"] = "history_only"
                         st.session_state["show_billing_client_idx"] = idx
                         st.session_state.pop("add_billing_client_idx", None)
                         st.rerun()
