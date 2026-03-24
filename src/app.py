@@ -1,12 +1,14 @@
 import sys
 from pathlib import Path
 
-# Ensure project root and src are on path (so config and agent/legal_searcher load)
+# Put project dirs on sys.path without prepending src (prevents src/*.py from
+# shadowing the stdlib, e.g. a stray calendar.py breaks httpx/openai).
 _root = Path(__file__).resolve().parent.parent
 _src = Path(__file__).resolve().parent
 for p in (_root, _src):
-    if str(p) not in sys.path:
-        sys.path.insert(0, str(p))
+    s = str(p)
+    if s not in sys.path:
+        sys.path.append(s)
 
 import streamlit as st
 from legal_searcher import legal_searcher

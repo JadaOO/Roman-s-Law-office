@@ -24,5 +24,70 @@
     "rate": 90.0,
     "hours": 8.0,
     "line_total": 720.0
+  },
+  {
+    "id": 3,
+    "client_index": 0,
+    "client_name": "Jada Yang",
+    "client_email": "jiada@gmail.com",
+    "date": "2026-03-20",
+    "ee": "78",
+    "activity": "jujuju",
+    "description": "89",
+    "rate": 89.0,
+    "hours": 9.0,
+    "line_total": 801.0
+  },
+  {
+    "id": 4,
+    "client_index": 0,
+    "client_name": "Jada Yang",
+    "client_email": "jiada@gmail.com",
+    "date": "2026-03-20",
+    "ee": "rrr",
+    "activity": "rr",
+    "description": "897",
+    "rate": 90.0,
+    "hours": 8.0,
+    "line_total": 720.0
+  },
+  {
+    "id": 5,
+    "client_index": 0,
+    "client_name": "Jada Yang",
+    "client_email": "jiada@gmail.com",
+    "date": "2026-03-20",
+    "ee": "copy",
+    "activity": "rr",
+    "description": "897",
+    "rate": 90.0,
+    "hours": 8.0,
+    "line_total": 720.0
+  },
+  {
+    "id": 6,
+    "client_index": 0,
+    "client_name": "Jada Yang",
+    "client_email": "jiada@gmail.com",
+    "date": "2026-03-20",
+    "ee": "copy",
+    "activity": "copy",
+    "description": "897",
+    "rate": 90.0,
+    "hours": 5.0,
+    "line_total": 450.0
+  },
+  {
+    "id": 7,
+    "client_index": 0,
+    "client_name": "Jada Yang",
+    "client_email": "jiada@gmail.com",
+    "date": "2026-03-20",
+    "ee": "78",
+    "activity": "co",
+    "description": "89",
+    "rate": 89.0,
+    "hours": 10.0,
+    "line_total": 890.0
   }
 ]

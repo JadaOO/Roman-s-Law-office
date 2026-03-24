@@ -1,0 +1,7 @@
+[console_scripts]
+law_automation = main:run
+replay = main:run
+run_crew = main:run
+run_with_trigger = main:run
+test = main:run
+train = main:run

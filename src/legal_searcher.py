@@ -64,26 +64,56 @@ def legal_searcher():
         with col_send:
             submitted = st.form_submit_button("Send")
 
-    if submitted and prompt.strip():
-        prompt = prompt.strip()
-        st.chat_message("user").write(prompt)
+    if submitted:
+        prompt = (prompt or "").strip()
+        upload_list = list(uploaded) if uploaded else []
+        pdf_files = [f for f in upload_list if f.name.lower().endswith(".pdf")]
 
-        with st.spinner("Researching Arizona law..."):
-            try:
-                answer, sources = _legal_chat_backend(prompt)
-            except Exception as e:
-                st.error(f"Backend error: {e}")
-                return
-
-        # Show each source on its own, separated by a blank line
-        if sources:
-            response = answer + "\n\nSources:\n\n" + "\n\n".join(sources)
+        if not prompt and not pdf_files:
+            st.warning("Enter a message and/or attach a PDF (in ➕), then click Send.")
         else:
-            response = answer
+            user_lines = []
+            if pdf_files:
+                user_lines.append("Uploaded PDF(s): " + ", ".join(f.name for f in pdf_files))
+            if prompt:
+                user_lines.append(prompt)
+            user_display = "\n".join(user_lines)
+            st.chat_message("user").write(user_display)
 
-        # Show assistant response with copy icon (via styled code block)
-        with st.chat_message("assistant"):
-            st.code(response, language="text")
+            response_parts: list[str] = []
 
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        st.session_state.messages.append({"role": "assistant", "content": response})
+            if pdf_files:
+                with st.spinner("Reading PDF(s), summarizing, matching client…"):
+                    try:
+                        from pdf_client_intel import run_pdf_intel_on_uploads
+
+                        pdf_block = run_pdf_intel_on_uploads(pdf_files)
+                    except Exception as e:
+                        st.error(f"PDF processing error: {e}")
+                        pdf_block = f"PDF processing error: {e}"
+                if pdf_block:
+                    response_parts.append(pdf_block)
+
+            if prompt:
+                with st.spinner("Researching Arizona law..."):
+                    try:
+                        answer, sources = _legal_chat_backend(prompt)
+                    except Exception as e:
+                        st.error(f"Backend error: {e}")
+                        answer, sources = "", []
+                if sources:
+                    response_parts.append(
+                        answer + "\n\nSources:\n\n" + "\n\n".join(sources)
+                    )
+                else:
+                    response_parts.append(answer)
+
+            response = "\n\n---\n\n".join(p for p in response_parts if p)
+            if not response.strip():
+                response = "(No response generated.)"
+
+            with st.chat_message("assistant"):
+                st.code(response, language="text")
+
+            st.session_state.messages.append({"role": "user", "content": user_display})
+            st.session_state.messages.append({"role": "assistant", "content": response})

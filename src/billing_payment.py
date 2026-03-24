@@ -40,6 +40,44 @@ def _save_clients(clients):
         f.flush()
 
 
+def _normalize_rulings(raw):
+    """Each ruling: {\"date\": str, \"ruling_name\": str}. Accepts legacy rulingName / rulingname."""
+    if not isinstance(raw, list):
+        return []
+    out = []
+    for item in raw:
+        if not isinstance(item, dict):
+            continue
+        d = item.get("date", "")
+        name = item.get("ruling_name") or item.get("rulingName") or item.get("rulingname") or ""
+        ds = str(d).strip() if d is not None else ""
+        ns = str(name).strip() if name is not None else ""
+        if ds or ns:
+            out.append({"date": ds, "ruling_name": ns})
+    return out
+
+
+def _rulings_formatted_lines(rulings):
+    r = _normalize_rulings(rulings)
+    return "\n".join(f"{x['date']} | {x['ruling_name']}" for x in r if x["date"] or x["ruling_name"])
+
+
+def _rulings_from_form_lines(text):
+    out = []
+    if not text or not str(text).strip():
+        return out
+    for line in str(text).strip().splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        if "|" in line:
+            date_part, _, name_part = line.partition("|")
+            out.append({"date": date_part.strip(), "ruling_name": name_part.strip()})
+        else:
+            out.append({"date": line, "ruling_name": ""})
+    return out
+
+
 def _load_billings():
     if not BILLING_FILE.exists():
         return []
@@ -324,10 +362,16 @@ def _show_client_billing(client_idx, client_name, client_email, client_obj):
                 st.write(f"**Line Total (Rate × Hours):** ${float(b.get('line_total', 0) or 0):,.2f}")
 
                 editing = st.session_state.get("editing_billing_id") == billing_id
-                if not editing:
-                    col_u, col_d = st.columns(2)
+                copying = st.session_state.get("billing_copy_source_id") == billing_id
+                if not editing and not copying:
+                    col_u, col_c, col_d = st.columns(3)
                     if col_u.button("Update", key=f"update_billing_{billing_id}"):
                         st.session_state["editing_billing_id"] = billing_id
+                        st.session_state.pop("billing_copy_source_id", None)
+                        st.rerun()
+                    if col_c.button("Cppy This Entry", key=f"copy_billing_{billing_id}"):
+                        st.session_state["billing_copy_source_id"] = billing_id
+                        st.session_state.pop("editing_billing_id", None)
                         st.rerun()
                     if col_d.button("Delete", key=f"delete_billing_{billing_id}"):
                         mutable = _load_billings()
@@ -357,14 +401,21 @@ def _show_client_billing(client_idx, client_name, client_email, client_obj):
                         save_btn = s1.form_submit_button("Save Billing Changes")
                         cancel_btn = s2.form_submit_button("Cancel")
                         if cancel_btn:
-                            st.session_state.pop("editing_billing_id", None)
+                            if st.session_state.get("editing_billing_id") == billing_id:
+                                st.session_state.pop("editing_billing_id", None)
+                            if st.session_state.get("billing_copy_source_id") == billing_id:
+                                st.session_state.pop("billing_copy_source_id", None)
                             st.rerun()
                         if save_btn:
                             all_bills = _load_billings()
-                            ui = _find_billing_by_id(all_bills, billing_id)
-                            if ui >= 0:
-                                all_bills[ui].update(
+                            is_copy = st.session_state.get("billing_copy_source_id") == billing_id
+                            if is_copy:
+                                all_bills.append(
                                     {
+                                        "id": _next_billing_id(all_bills),
+                                        "client_index": client_idx,
+                                        "client_name": client_name,
+                                        "client_email": client_email,
                                         "date": ub_date.isoformat(),
                                         "ee": ub_ee.strip(),
                                         "activity": ub_activity.strip(),
@@ -375,8 +426,26 @@ def _show_client_billing(client_idx, client_name, client_email, client_obj):
                                     }
                                 )
                                 _save_billings(all_bills)
-                            st.session_state.pop("editing_billing_id", None)
-                            st.success("Billing entry updated.")
+                                st.session_state.pop("billing_copy_source_id", None)
+                                st.session_state.pop("editing_billing_id", None)
+                                st.success("New billing entry saved.")
+                            else:
+                                ui = _find_billing_by_id(all_bills, billing_id)
+                                if ui >= 0:
+                                    all_bills[ui].update(
+                                        {
+                                            "date": ub_date.isoformat(),
+                                            "ee": ub_ee.strip(),
+                                            "activity": ub_activity.strip(),
+                                            "description": ub_description.strip(),
+                                            "rate": ub_rate,
+                                            "hours": ub_hours,
+                                            "line_total": ub_line_total,
+                                        }
+                                    )
+                                    _save_billings(all_bills)
+                                st.session_state.pop("editing_billing_id", None)
+                                st.success("Billing entry updated.")
                             st.rerun()
 
     history_key = f"show_invoice_history_{client_idx}"
@@ -573,6 +642,13 @@ def billing_payment():
                     st.write(f"**Case Link:** {c.get('case_link', '')}")
                     st.write(f"**Case Description:** {c.get('case_description', '')}")
                     st.write(f"**Status:** {status_val}")
+                    rulings_disp = _normalize_rulings(c.get("rulings"))
+                    if rulings_disp:
+                        st.markdown("**Rulings:**")
+                        for r in rulings_disp:
+                            st.write(f"- **{r['date']}** — {r['ruling_name']}")
+                    else:
+                        st.write("**Rulings:** —")
 
                     col_billing, col_show, col_history, col_u, col_d = st.columns(5)
                     add_billing_clicked = col_billing.button("Add Billing", key=f"add_billing_{idx}")
@@ -673,6 +749,11 @@ def billing_payment():
                                 horizontal=True,
                                 key=f"update_status_{idx}",
                             )
+                            new_rulings_text = st.text_area(
+                                "Rulings (one per line: YYYY-MM-DD | ruling name)",
+                                value=_rulings_formatted_lines(c.get("rulings")),
+                                key=f"update_rulings_{idx}",
+                            )
                             s1, s2 = st.columns(2)
                             save_update = s1.form_submit_button("Save Changes")
                             cancel_update = s2.form_submit_button("Cancel")
@@ -691,6 +772,7 @@ def billing_payment():
                                         "case_link": new_case_link.strip(),
                                         "case_description": new_case_description.strip(),
                                         "status": new_status,
+                                        "rulings": _rulings_from_form_lines(new_rulings_text),
                                     }
                                     _save_clients(current)
                                 st.session_state.pop("editing_client_idx", None)
@@ -713,6 +795,10 @@ def billing_payment():
                 case_number = st.text_input("Case Number")
                 case_link = st.text_input("Case Link")
                 case_description = st.text_area("Case Description")
+                rulings_text = st.text_area(
+                    "Rulings (one per line: YYYY-MM-DD | ruling name)",
+                    value="",
+                )
                 status = st.radio("Active status", options=["active", "inactive"], horizontal=True)
                 c1, c2 = st.columns(2)
                 submit = c1.form_submit_button("Add Client")
@@ -731,6 +817,7 @@ def billing_payment():
                             "case_link": case_link.strip(),
                             "case_description": case_description.strip(),
                             "status": status,
+                            "rulings": _rulings_from_form_lines(rulings_text),
                         }
                     )
                     _save_clients(clients)

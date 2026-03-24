@@ -1,4 +1,3 @@
-import calendar
 import json
 from pathlib import Path
 import datetime

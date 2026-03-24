@@ -1,0 +1,15 @@
+agent
+app
+azlaw_scraper
+billing_payment
+chatbot_law_check
+config
+homepage_calendar
+law_automation
+legal_searcher
+main
+pdf_client_intel
+pushover_reminder_service
+sendgrid
+serper_search
+test_law_automation
