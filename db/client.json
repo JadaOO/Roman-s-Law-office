@@ -8,6 +8,22 @@
     "case_link": "https://www.superiorcourt.maricopa.gov/docket/FamilyCourtCases",
     "case_description": "",
     "status": "active",
+    "rulings": [
+      {
+        "date": "2026-03-27",
+        "ruling_name": "This court ruling is from a case unrelated to your client, Fang Yang (Case No. 1111111). The decision involves a landlord-tenant dispute in the case of Smith v. Jones. Below is the summary of the court's decision in that case:\n\n### Court Ruling Summary\n**Case Name:** Smith v. Jones  \n**Relevant Parties:** Mr. Smith (Plaintiff/Landlord), Mr. Jones (Defendant/Tenant)  \n**Outcome:**\n- **Judgment in Favor of Mr. Smith:**\n  - Mr. Smith is granted possession of the rental property located at 110 S. Ginsberg Ave, Colbin, NC.\n  - Judgment for past due rent and late fees totaling $880.\n  - The judgment will accrue interest at a rate of 8% until settled.\n\n- **Tenant's Nonpayment:**\n  - Mr. Jones failed to make full rental payments since August, providing payment of only $250 for that month and none thereafter.\n  - Mr. Smith complied with legal requirements to demand rent before filing the action.\n\n- **Appeal Rights:**\n  - Mr. Jones has 10 days to file an appeal, either in open court or in writing at the clerk's office.\n  - If appealed, Mr. Jones must pay the costs of appeal within the same 10-day period.\n\n**Important Dates:**\n- Judgment becomes final 10 days from the ruling.\n- Procedure to enforce judgment can commence after 10 days if no appeal is filed.\n\n### Notes\n- No direct impact or relevance to Fang Yang's case based on the provided material.\n- For any assistance or actions needed regarding a different matter, please provide relevant case details."
+      }
+    ]
+  },
+  {
+    "name": "Labubu",
+    "email": "labubu@gmail.com",
+    "phone": "23456789",
+    "address": "34th Dr",
+    "case_number": "786",
+    "case_link": "ww.hi.com",
+    "case_description": "",
+    "status": "active",
     "rulings": []
   }
 ]

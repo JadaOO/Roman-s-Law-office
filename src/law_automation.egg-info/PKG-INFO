@@ -6,4 +6,3 @@ Author-email: Jada Yang <jiadaouyang@gmail.com>
 Requires-Python: <3.14,>=3.10
 Requires-Dist: crewai[tools]==1.9.3
 Requires-Dist: streamlit
-Requires-Dist: pypdf>=4.0.0

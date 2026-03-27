@@ -7,7 +7,6 @@ requires-python = ">=3.10,<3.14"
 dependencies = [
     "crewai[tools]==1.9.3",
     "streamlit",
-    "pypdf>=4.0.0",
 ]
 
 [project.scripts]
@@ -38,10 +37,10 @@ py-modules = [
     "law_automation",
     "legal_searcher",
     "main",
-    "pdf_client_intel",
     "pushover_reminder_service",
     "sendgrid",
     "serper_search",
+    "summarize_rulings",
     "test_law_automation",
 ]
 

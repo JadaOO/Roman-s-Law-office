@@ -12,6 +12,7 @@ for p in (_root, _src):
 
 import streamlit as st
 from legal_searcher import legal_searcher
+from summarize_rulings import summarize_rulings_page
 from law_automation import LawAutomation
 # from sendgrid import send_email
 from homepage_calendar import show_calendar
@@ -27,10 +28,10 @@ def main():
 
     st.title("Roman Kostenko's Law Office")
 
-    tab_calendar, tab_research,tab_email, tab_billing = st.tabs([
+    tab_calendar, tab_research,tab_summarize, tab_billing = st.tabs([
         "Calendar",
-        "Legal Research, Email Writing, and Petition Drafting",
-        "Send Email",
+        "Legal Research, Email Writing",
+        "Summarize Court Rulings",
         "Billing & Payment"
     ])
 
@@ -38,8 +39,8 @@ def main():
         show_calendar()
     with tab_research:
         legal_searcher()
-    with tab_email:
-        st.header("email")
+    with tab_summarize:
+        summarize_rulings_page()
     with tab_billing:
         billing_payment()
 

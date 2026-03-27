@@ -10,7 +10,6 @@ src/homepage_calendar.py
 src/law_automation.py
 src/legal_searcher.py
 src/main.py
-src/pdf_client_intel.py
 src/pushover_reminder_service.py
 src/sendgrid.py
 src/serper_search.py
