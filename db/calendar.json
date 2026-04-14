@@ -51,5 +51,37 @@
       "event_time": "2:30PM-3:30PM",
       "event_location": "scottdale"
     }
+  ],
+  "2026-03-31": [
+    {
+      "event_name": "interview",
+      "event_time": "2:00pm",
+      "event_location": "Canyon Building"
+    },
+    {
+      "event_name": "Labubu",
+      "event_time": "12:00pm",
+      "event_location": "Teams"
+    },
+    {
+      "event_name": "Meeting",
+      "event_time": "9:30am-10:30am",
+      "event_location": "Slack"
+    },
+    {
+      "event_name": "hearing",
+      "event_time": "9: 33am",
+      "event_location": "hiii"
+    },
+    {
+      "event_name": "Oral Debat",
+      "event_time": "9:35am",
+      "event_location": "Slack"
+    },
+    {
+      "event_name": "Hi",
+      "event_time": "9:41am -11:41am",
+      "event_location": "Court room 401"
+    }
   ]
 }

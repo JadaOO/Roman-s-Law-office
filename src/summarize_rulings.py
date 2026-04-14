@@ -1,9 +1,3 @@
-"""
-Summarize court rulings for the firm UI. Uses OpenAI API (same account as the legal research tab).
-
-Note: https://chatgpt.com/ cannot be embedded in Streamlit; we link to it in the browser instead.
-"""
-
 import base64
 import datetime
 import uuid
@@ -114,9 +108,11 @@ def _summarize_with_openai(bundle: str, attorney_notes: str) -> str:
         bundle = bundle[:50_000].rstrip() + "\n\n[Truncated for API size; paste shorter excerpts if needed.]"
     user_content = f"""
 Summarize the following court ruling(s) / order(s) for an Arizona family law attorney.
-
+Summarize ALL the relevant information from the ruling(s) / order(s) for the client.
 Prioritize any outcome that helps the client, then give a balanced picture.
 Use clear headings and bullet points. Include important dates and deadlines mentioned.
+Summarize the ruling(s) / order(s) for both parties.
+Put the client's ruling(s) / order(s) first, then the other party's ruling(s) / order(s).
 
 MATERIAL:
 {bundle}
@@ -132,6 +128,7 @@ MATERIAL:
                 "content": (
                     "You are a paralegal summarizing court documents for a licensed Arizona family law attorney. "
                     "Stick to the text supplied; flag uncertainty clearly."
+                    "Output the summary in the same language as the input text."
                 ),
             },
             {"role": "user", "content": user_content},
@@ -145,20 +142,14 @@ def summarize_rulings_page():
     """Streamlit UI aligned with the rest of Roman Kostenko's Law Office app."""
     st.subheader("Summarize court rulings")
     if st.session_state.pop("_ruling_just_saved", False):
-        st.success("Saved this summary to the client’s rulings in `client.json`.")
+        st.success("Saved this summary to the client's rulings.")
     st.caption(
         "Pull rulings from a client record, add pasted order text if needed, then generate a summary. "
-        "This tab uses the OpenAI API (same as Legal Research). ChatGPT’s website cannot be embedded here."
     )
 
-    top_a, top_b = st.columns([1, 2])
+    top_a = st.columns([1])[0]
     with top_a:
         st.link_button("Open ChatGPT in browser", CHATGPT_URL)
-    with top_b:
-        st.markdown(
-            "Continue below with the **OpenAI API** (same key as Legal Research), or open "
-            f"[ChatGPT]({CHATGPT_URL}) for a separate browser session."
-        )
 
     clients = _load_clients()
     selected = None
@@ -166,10 +157,9 @@ def summarize_rulings_page():
     if not clients:
         st.info(
             "No clients in `db/client.json` yet. Add a client under **Billing & Payment**, "
-            "or use **Pasted text only** once you have clients."
         )
     else:
-        labels = ["— Pasted text only —"] + [
+        labels = ["— Find Your Client Here—"] + [
             f"{i}: {c.get('name', 'Unnamed')}" for i, c in enumerate(clients)
         ]
         choice = st.selectbox("Client (for rulings saved on file)", options=labels, index=0)

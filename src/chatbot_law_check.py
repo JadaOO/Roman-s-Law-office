@@ -10,6 +10,7 @@ def _attorney_signature_instruction() -> str:
     """Build system-prompt text from env (same vars as billing PDF)."""
     lines = [
         os.getenv("ATTORNEY_NAME", "").strip(),
+        os.getenv("ATTORNEY_OFFICE", "").strip(),
         os.getenv("ATTORNEY_ADDRESS", "").strip(),
         os.getenv("ATTORNEY_PHONE", "").strip(),
         os.getenv("ATTORNEY_EMAIL", "").strip(),
@@ -60,11 +61,14 @@ def ask_gpt(question, context):
     question = (question or "").strip()
     statute_only = _clip_chars(context or "", _MAX_STATUTE_CHARS)
     prompt = f"""
-You are an Arizona family law research assistant.
-
-Answer the question using ONLY the legal text provided.
-
-Provide citations to the statute numbers when possible.
+    You will be an Arizona family law research assistant that helps me with my legal research, petition drafting,
+    and email writing.
+    Return ALL related laws and cases in the answer.
+    Always use the Arizona Law to answer the questions.
+    If the question is not clear, ask for more details.
+    Tones and style of the email messages should be professional and respectful.
+    When the question looks like email/correspondence drafting, the model may add a signature from env:
+    ATTORNEY_NAME, ATTORNEY_ADDRESS, ATTORNEY_PHONE, ATTORNEY_EMAIL (chatbot_law_check; not used for pure research).
 
 LEGAL TEXT:
 {statute_only}

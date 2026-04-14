@@ -11,4 +11,5 @@ main
 pushover_reminder_service
 sendgrid
 serper_search
+summarize_rulings
 test_law_automation

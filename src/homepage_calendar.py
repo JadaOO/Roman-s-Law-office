@@ -33,7 +33,7 @@ def show_calendar():
 
     st.subheader(f"Today is {today}, {today.strftime('%A')}")
     selected_date = st.date_input(
-        "Check your events for this date",
+        "Check your events for this date (can send text or notification to your phone, also send reminder email to clients)",
         value=today,
         key="beautiful_day_calendar",
     )

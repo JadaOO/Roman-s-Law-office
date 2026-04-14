@@ -1,0 +1,11 @@
+# Core (matches pyproject.toml)
+crewai[tools]==1.9.3
+streamlit
+
+# Used directly in src/
+beautifulsoup4
+fpdf2
+openai
+python-dotenv
+requests
+sendgrid

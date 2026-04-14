@@ -1,6 +1,6 @@
 [
   {
-    "name": "Fang Yang",
+    "name": "David Smith",
     "email": "jiada@gmail.com",
     "phone": "4809380000",
     "address": "34th Dr",
@@ -10,8 +10,8 @@
     "status": "active",
     "rulings": [
       {
-        "date": "2026-03-27",
-        "ruling_name": "This court ruling is from a case unrelated to your client, Fang Yang (Case No. 1111111). The decision involves a landlord-tenant dispute in the case of Smith v. Jones. Below is the summary of the court's decision in that case:\n\n### Court Ruling Summary\n**Case Name:** Smith v. Jones  \n**Relevant Parties:** Mr. Smith (Plaintiff/Landlord), Mr. Jones (Defendant/Tenant)  \n**Outcome:**\n- **Judgment in Favor of Mr. Smith:**\n  - Mr. Smith is granted possession of the rental property located at 110 S. Ginsberg Ave, Colbin, NC.\n  - Judgment for past due rent and late fees totaling $880.\n  - The judgment will accrue interest at a rate of 8% until settled.\n\n- **Tenant's Nonpayment:**\n  - Mr. Jones failed to make full rental payments since August, providing payment of only $250 for that month and none thereafter.\n  - Mr. Smith complied with legal requirements to demand rent before filing the action.\n\n- **Appeal Rights:**\n  - Mr. Jones has 10 days to file an appeal, either in open court or in writing at the clerk's office.\n  - If appealed, Mr. Jones must pay the costs of appeal within the same 10-day period.\n\n**Important Dates:**\n- Judgment becomes final 10 days from the ruling.\n- Procedure to enforce judgment can commence after 10 days if no appeal is filed.\n\n### Notes\n- No direct impact or relevance to Fang Yang's case based on the provided material.\n- For any assistance or actions needed regarding a different matter, please provide relevant case details."
+        "date": "2026-03-31",
+        "ruling_name": "```markdown\n# Summary of Court Ruling for Case No. 1111111: Smith v. Jones\n\n## Rulings in Favor of Client: David Smith\n\n- **Judgment Granted**: The court ruled in favor of David Smith on his claim for summary ejectment.\n- **Lease Agreement Breach**: Evidence showed that Mr. Jones was obligated to pay $500 monthly rent and failed to pay the full amount for August (paid $250) and did not pay for subsequent months.\n- **Past Due Rent and Late Fees Award**: \n  - Total past due rent: $850\n  - Late fees for two months: $30\n  - Total judgment amount: $880\n- **Interest Accrual**: The judgment will accrue interest at a rate of 8% until Mr. Jones pays the amount owed to the clerk of court.\n- **Possession of Rental Property**: David Smith is entitled to possession of the premises located at 110 S. Ginsberg Ave, Colbin, NC.\n- **Judgment Timeline**: \n  - The judgment becomes final in 10 days.\n  - Mr. Smith may go to the clerk's office to begin the enforcement procedure after 10 days if Mr. Jones does not appeal.\n\n## Rulings for the Opposing Party: Mr. Jones\n\n- **Nonpayment Explanation Considered**: The court acknowledged Mr. Jones's explanation for nonpayment due to circumstances beyond his control but upheld the landlord's right to regain possession for nonpayment.\n- **Right to Appeal**: Mr. Jones has the right to appeal the decision:\n  - Must provide formal notice of appeal either immediately in court or by filing written notice with the clerk\u2019s office within 10 days.\n  - Must pay the costs of appeal to the clerk\u2019s office within 10 days if he chooses to appeal.\n```"
       }
     ]
   },

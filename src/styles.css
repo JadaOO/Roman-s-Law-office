@@ -15,6 +15,14 @@
     background-color: transparent;
 }
 
+/* Text inputs */
+div[data-testid="stTextInputRootElement"]:focus-within {
+    border-color: #6b7280 !important;
+    box-shadow: 0 0 0 1px #6b7280 !important;
+    outline: none !important;
+}
+
+
 /* Chat container focus state */
 .st-emotion-cache-6mn6c9:focus-within {
     outline: none !important;
@@ -22,7 +30,29 @@
     box-shadow: 0 0 0 1px black !important;
 }
 
+/* st.code copy control: toolbar is opacity-0 until hover; force it always on */
+[data-testid="stCodeBlock"] [data-testid="stElementToolbar"],
+.stCode [data-testid="stElementToolbar"] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    margin-bottom: 6px !important;
+}
+
+.stCode button:has(svg[data-testid="stElementToolbarButtonIcon"]) {
+    opacity: 1 !important;
+}
+
+svg[data-testid="stElementToolbarButtonIcon"] {
+    width: 20px !important;
+    height: 20px !important;
+    opacity: 1 !important;
+}
+
 /* Make code blocks (used for responses) look like normal text but keep copy icon */
+.stCode pre {
+    margin: 0 0 6px 0 !important;
+}
 .stCode code {
     font-family: inherit !important;
     font-size: 0.95rem !important;
@@ -39,6 +69,7 @@
     background-color: transparent !important;
     border: none !important;
     padding: 0 !important;
+    margin-bottom: 0 !important;
 }
 
 /* Make primary buttons green */

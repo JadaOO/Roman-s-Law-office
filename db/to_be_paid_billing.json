@@ -1,1 +1,133 @@
-[]
+[
+  {
+    "invoice_number": "11516",
+    "client_index": 0,
+    "client_name": "Fang Yang",
+    "client_email": "jiada@gmail.com",
+    "invoice_pdf": "/Users/a14809/amex/law_automation/db/statements/Invoice_2026-03-31_Fang_Yang_11516.pdf",
+    "invoice_date": "2026-03-31",
+    "payment_deadline": "2026-04-14",
+    "status": "unpaid",
+    "total_amount": 12222.0,
+    "billings": [
+      {
+        "id": 1,
+        "client_index": 0,
+        "client_name": "Jada",
+        "client_email": "jiadaouyang@gmail.com",
+        "date": "2026-03-20",
+        "ee": "78",
+        "activity": "jujuju",
+        "description": "89",
+        "rate": 89.0,
+        "hours": 89.0,
+        "line_total": 7921.0
+      },
+      {
+        "id": 2,
+        "client_index": 0,
+        "client_name": "Jada",
+        "client_email": "jiadaouyang@gmail.com",
+        "date": "2026-03-20",
+        "ee": "rrr",
+        "activity": "rr",
+        "description": "897",
+        "rate": 90.0,
+        "hours": 8.0,
+        "line_total": 720.0
+      },
+      {
+        "id": 3,
+        "client_index": 0,
+        "client_name": "Jada Yang",
+        "client_email": "jiada@gmail.com",
+        "date": "2026-03-20",
+        "ee": "78",
+        "activity": "jujuju",
+        "description": "89",
+        "rate": 89.0,
+        "hours": 9.0,
+        "line_total": 801.0
+      },
+      {
+        "id": 4,
+        "client_index": 0,
+        "client_name": "Jada Yang",
+        "client_email": "jiada@gmail.com",
+        "date": "2026-03-20",
+        "ee": "rrr",
+        "activity": "rr",
+        "description": "897",
+        "rate": 90.0,
+        "hours": 8.0,
+        "line_total": 720.0
+      },
+      {
+        "id": 5,
+        "client_index": 0,
+        "client_name": "Jada Yang",
+        "client_email": "jiada@gmail.com",
+        "date": "2026-03-20",
+        "ee": "copy",
+        "activity": "rr",
+        "description": "897",
+        "rate": 90.0,
+        "hours": 8.0,
+        "line_total": 720.0
+      },
+      {
+        "id": 6,
+        "client_index": 0,
+        "client_name": "Jada Yang",
+        "client_email": "jiada@gmail.com",
+        "date": "2026-03-20",
+        "ee": "copy",
+        "activity": "copy",
+        "description": "897",
+        "rate": 90.0,
+        "hours": 5.0,
+        "line_total": 450.0
+      },
+      {
+        "id": 7,
+        "client_index": 0,
+        "client_name": "Jada Yang",
+        "client_email": "jiada@gmail.com",
+        "date": "2026-03-20",
+        "ee": "78",
+        "activity": "co",
+        "description": "89",
+        "rate": 89.0,
+        "hours": 10.0,
+        "line_total": 890.0
+      }
+    ]
+  },
+  {
+    "invoice_number": "66362",
+    "client_index": 0,
+    "client_name": "David Smith",
+    "client_email": "jiada@gmail.com",
+    "invoice_pdf": "/Users/a14809/amex/law_automation/db/statements/Invoice_2026-03-31_David_Smith_66362.pdf",
+    "invoice_date": "2026-03-31",
+    "payment_deadline": "2026-04-14",
+    "status": "paid",
+    "total_amount": 1700.0,
+    "billings": [
+      {
+        "id": 1,
+        "client_index": 0,
+        "client_name": "Fang Yang",
+        "client_email": "jiada@gmail.com",
+        "date": "2026-03-31",
+        "ee": "jjjj",
+        "activity": "jjjj",
+        "description": "Test",
+        "rate": 340.0,
+        "hours": 5.0,
+        "line_total": 1700.0
+      }
+    ],
+    "paid_date": "2026-03-31"
+  }
+]

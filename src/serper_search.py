@@ -21,4 +21,4 @@ def search_az_family_law(query):
     for r in results.get("organic", []):
         links.append(r["link"])
 
-    return links[:3]
+    return links[:10]

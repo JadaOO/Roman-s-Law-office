@@ -13,6 +13,7 @@ src/main.py
 src/pushover_reminder_service.py
 src/sendgrid.py
 src/serper_search.py
+src/summarize_rulings.py
 src/test_law_automation.py
 src/law_automation.egg-info/PKG-INFO
 src/law_automation.egg-info/SOURCES.txt

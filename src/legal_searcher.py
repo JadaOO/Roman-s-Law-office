@@ -20,15 +20,7 @@ class ResearchAgent:
 
 def legal_searcher():
     """
-    You will be an Arizona family law research assistant that helps me with my legal research, petition drafting,
-    and email writing.
-    You will be able to search the internet for the relevant laws and cases based on Arizona Law.
-    Return ALL related laws and cases in the answer.
-    Always use the Arizona Law to answer the questions.
-    If the question is not clear, ask for more details.
-    Tones and style of the email messages should be professional and respectful.
-    When the question looks like email/correspondence drafting, the model may add a signature from env:
-    ATTORNEY_NAME, ATTORNEY_ADDRESS, ATTORNEY_PHONE, ATTORNEY_EMAIL (chatbot_law_check; not used for pure research).
+
     """
     st.write("Hi Roman, how can I help you today?")
 
@@ -38,7 +30,7 @@ def legal_searcher():
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
             if msg["role"] == "assistant":
-                st.markdown(msg["content"])
+                st.code(msg["content"], language="text")
             else:
                 st.write(msg["content"])
 
@@ -47,7 +39,7 @@ def legal_searcher():
         with col_input:
             prompt = st.text_input(
                 "Message",
-                placeholder="legal research, draft petitions, write emails and more...",
+                placeholder="research AZ law, write email to X about Y, draft petitions and more...",
                 key="legal_prompt_inline",
                 label_visibility="collapsed",
             )
@@ -72,7 +64,7 @@ def legal_searcher():
             response = answer
 
         with st.chat_message("assistant"):
-            st.markdown(response)
+            st.code(response, language="text")
 
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.session_state.messages.append({"role": "assistant", "content": response})
